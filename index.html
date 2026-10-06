@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="iPhones novos e seminovos na RayTech.">
+  <title>RayTech | iPhones novos e seminovos</title>
+  <link rel="icon" href="./assets/logo-raytech.png">
+  <link rel="stylesheet" href="./assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./" aria-label="RayTech - início">
+        <img src="./assets/logo-raytech.png" alt="Logo RayTech">
+        <span>RAYTECH</span>
+      </a>
+      <label class="header-search">
+        <span class="sr-only">Buscar iPhone</span>
+        <svg aria-hidden="true"><use href="#icon-search"></use></svg>
+        <input id="desktop-search" type="search" placeholder="Busque pelo modelo do iPhone">
+      </label>
+      <a class="instagram-link" href="https://www.instagram.com/raytech.oficial" target="_blank" rel="noreferrer">
+        <svg aria-hidden="true"><use href="#icon-instagram"></use></svg>
+        <span>@raytech.oficial</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img class="hero-image" src="./assets/hero-iphones.png" alt="iPhones novos e seminovos">
+      <div class="hero-shade"></div>
+      <div class="container hero-content">
+        <div class="hero-copy">
+          <span class="eyebrow">iPhones novos e seminovos</span>
+          <h1>Seu próximo iPhone está <span>aqui.</span></h1>
+          <p>Modelos selecionados, atendimento direto e uma compra simples do começo ao fim.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#produtos">Ver produtos</a>
+            <a class="button secondary" data-whatsapp-link target="_blank" rel="noreferrer">Falar no WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits" aria-label="Diferenciais da loja">
+      <div class="container benefits-grid">
+        <article><svg><use href="#icon-phone"></use></svg><div><strong>iPhones novos</strong><span>Modelos lacrados e selecionados</span></div></article>
+        <article><svg><use href="#icon-shield"></use></svg><div><strong>iPhones seminovos</strong><span>Aparelhos avaliados antes da venda</span></div></article>
+        <article><svg><use href="#icon-check"></use></svg><div><strong>Compra segura</strong><span>Atendimento direto pelo WhatsApp</span></div></article>
+      </div>
+    </section>
+
+    <section class="catalog container" id="produtos">
+      <div class="catalog-heading">
+        <div><p class="section-label">LOJA RAYTECH</p><h2>iPhones disponíveis</h2></div>
+        <label class="mobile-search"><svg aria-hidden="true"><use href="#icon-search"></use></svg><input id="mobile-search" type="search" placeholder="Buscar produtos"></label>
+        <div class="filters" id="category-filters" aria-label="Filtrar produtos"></div>
+      </div>
+      <div class="loading-grid" id="loading-products" aria-label="Carregando produtos"><i></i><i></i><i></i><i></i></div>
+      <div class="product-grid" id="product-grid"></div>
+      <div class="empty-state hidden" id="empty-products">
+        <svg><use href="#icon-phone"></use></svg>
+        <h3>Catálogo em atualização</h3>
+        <p>Novos iPhones serão cadastrados em breve. Fale com a RayTech para consultar modelos e valores.</p>
+        <a class="button primary" data-whatsapp-link target="_blank" rel="noreferrer">Consultar pelo WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="brand"><img src="./assets/logo-raytech.png" alt=""><span>RAYTECH</span></div>
+      <p>© 2026 RayTech · iPhones novos e seminovos</p>
+      <a class="footer-social" href="https://www.instagram.com/raytech.oficial" target="_blank" rel="noreferrer" aria-label="Instagram"><svg><use href="#icon-instagram"></use></svg></a>
+    </div>
+  </footer>
+
+  <button class="cart-fab" id="cart-button" type="button" aria-controls="cart-drawer">
+    <svg><use href="#icon-cart"></use></svg><span>Carrinho</span><b id="cart-count" class="hidden">0</b>
+  </button>
+  <div class="drawer-backdrop hidden" id="drawer-backdrop"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-hidden="true">
+    <div class="drawer-header"><div><h2>Seu carrinho</h2><p>Revise os iPhones antes de enviar o pedido.</p></div><button class="icon-button" id="close-cart" aria-label="Fechar carrinho">×</button></div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="drawer-footer"><div class="total-row"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div><button class="button primary full" id="checkout-button" disabled>Finalizar pelo WhatsApp</button></div>
+  </aside>
+
+  <dialog id="checkout-dialog" class="checkout-dialog">
+    <form id="checkout-form">
+      <div class="dialog-heading"><div><h2>Finalizar pedido</h2><p>Preencha seus dados para registrar o pedido e continuar no WhatsApp.</p></div><button type="button" class="icon-button" id="close-checkout" aria-label="Fechar">×</button></div>
+      <label>Nome<input name="name" required minlength="2" autocomplete="name"></label>
+      <label>WhatsApp<input name="phone" required minlength="10" inputmode="tel" autocomplete="tel" placeholder="(62) 99999-9999"></label>
+      <label>Observação<textarea name="notes" rows="3" maxlength="500" placeholder="Cor, modelo ou outra informação"></textarea></label>
+      <div class="total-row"><span>Total</span><strong id="checkout-total">R$ 0,00</strong></div>
+      <button class="button primary full" id="submit-order" type="submit">Enviar pedido pelo WhatsApp</button>
+    </form>
+  </dialog>
+
+  <div class="toast hidden" id="toast" role="status"></div>
+
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></symbol>
+    <symbol id="icon-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"></rect><path d="M10 18h4"></path></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path><path d="M21 12a9 9 0 1 1-5.3-8.2"></path></symbol>
+    <symbol id="icon-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1"></circle><circle cx="19" cy="20" r="1"></circle><path d="M3 3h2l2.4 11.1a2 2 0 0 0 2 1.6h8.9a2 2 0 0 0 2-1.6L22 7H6"></path></symbol>
+  </svg>
+  <script type="module" src="./assets/store.js"></script>
+</body>
+</html>
