@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="robots" content="noindex,nofollow">
+  <title>RayTech Admin</title>
+  <link rel="icon" href="../assets/logo-raytech.png">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body class="admin-body">
+  <main class="login-page" id="login-view">
+    <section class="login-card">
+      <img src="../assets/logo-raytech.png" alt="Logo RayTech">
+      <p class="section-label">ÁREA RESTRITA</p>
+      <h1>RayTech Admin</h1>
+      <p class="muted">Entre com seu e-mail e senha para administrar produtos, estoque e pedidos.</p>
+      <form id="login-form" class="stack-form">
+        <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
+        <label>Senha<input type="password" name="password" required minlength="6" autocomplete="current-password"></label>
+        <button class="button primary full" type="submit">Entrar</button>
+      </form>
+      <button class="text-button" id="show-signup" type="button">Primeiro acesso? Criar conta administrativa</button>
+      <a class="back-link" href="../">Voltar à loja</a>
+    </section>
+  </main>
+
+  <main class="login-page hidden" id="signup-view">
+    <section class="login-card">
+      <img src="../assets/logo-raytech.png" alt="Logo RayTech">
+      <p class="section-label">PRIMEIRO ACESSO</p>
+      <h1>Criar acesso</h1>
+      <p class="muted">Use o e-mail autorizado para criar sua senha. Se a confirmação estiver ativa, verifique sua caixa de entrada.</p>
+      <form id="signup-form" class="stack-form">
+        <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
+        <label>Senha<input type="password" name="password" required minlength="8" autocomplete="new-password"></label>
+        <label>Confirmar senha<input type="password" name="confirmation" required minlength="8" autocomplete="new-password"></label>
+        <button class="button primary full" type="submit">Criar conta</button>
+      </form>
+      <button class="text-button" id="show-login" type="button">Já tenho uma conta</button>
+    </section>
+  </main>
+
+  <main class="admin-shell hidden" id="admin-view">
+    <header class="admin-header">
+      <div class="container header-inner">
+        <div class="brand"><img src="../assets/logo-raytech.png" alt="Logo RayTech"><div><span>RayTech Admin</span><small id="admin-email"></small></div></div>
+        <div class="admin-header-actions"><a class="button secondary compact" href="../" target="_blank">Ver loja</a><button class="button secondary compact" id="logout-button" type="button">Sair</button></div>
+      </div>
+    </header>
+
+    <div class="container admin-layout">
+      <aside class="admin-form-card">
+        <div class="panel-title"><span>＋</span><div><h1 id="product-form-title">Cadastrar produto</h1><p>Adicione as informações da vitrine.</p></div></div>
+        <form id="product-form" class="stack-form">
+          <input type="hidden" name="id">
+          <input type="hidden" name="currentImagePath">
+          <label>Nome<input name="name" required minlength="2" maxlength="120"></label>
+          <label>Condição<select name="category" required><option value="Novo">iPhone novo</option><option value="Seminovo">iPhone seminovo</option></select></label>
+          <div class="field-grid"><label>Preço<input name="price" required inputmode="decimal" placeholder="4.999,90"></label><label>Preço anterior<input name="compareAtPrice" inputmode="decimal" placeholder="5.299,90"></label></div>
+          <label>Estoque<input name="stock" required type="number" min="0" value="1"></label>
+          <label>Descrição<textarea name="description" rows="4" maxlength="1200" placeholder="Cor, capacidade, saúde da bateria e garantia"></textarea></label>
+          <label>Imagem do produto<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></label>
+          <div class="checkboxes"><label><input type="checkbox" name="active" checked> Disponível na loja</label><label><input type="checkbox" name="featured"> Produto em destaque</label></div>
+          <button class="button primary full" id="save-product" type="submit">Salvar produto</button>
+          <button class="button secondary full hidden" id="cancel-edit" type="button">Cancelar edição</button>
+        </form>
+      </aside>
+
+      <div class="admin-content">
+        <section class="stats-grid"><article><span>Produtos</span><strong id="stat-products">0</strong></article><article><span>Em estoque</span><strong id="stat-stock">0</strong></article><article><span>Pedidos</span><strong id="stat-orders">0</strong></article></section>
+        <section class="admin-panel">
+          <div class="panel-heading"><div><h2>Produtos</h2><p>Cadastros da vitrine RayTech</p></div><button class="button secondary compact" id="refresh-products" type="button">Atualizar</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Produto</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead><tbody id="products-table"></tbody></table></div>
+          <div class="empty-state small hidden" id="empty-admin-products"><p>Nenhum produto cadastrado.</p></div>
+        </section>
+        <section class="admin-panel">
+          <div class="panel-heading"><div><h2>Pedidos recentes</h2><p>Pedidos registrados pela loja</p></div><button class="button secondary compact" id="refresh-orders" type="button">Atualizar</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Status</th></tr></thead><tbody id="orders-table"></tbody></table></div>
+          <div class="empty-state small hidden" id="empty-orders"><p>Nenhum pedido recebido.</p></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast hidden" id="toast" role="status"></div>
+  <script type="module" src="../assets/admin.js"></script>
+</body>
+</html>
