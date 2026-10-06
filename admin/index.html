@@ -15,37 +15,19 @@
       <img src="../assets/logo-raytech.png" alt="Logo RayTech">
       <p class="section-label">ÁREA RESTRITA</p>
       <h1>RayTech Admin</h1>
-      <p class="muted">Entre com seu e-mail e senha para administrar produtos, estoque e pedidos.</p>
+      <p class="muted">Digite o PIN de 4 dígitos para administrar produtos, estoque e pedidos.</p>
       <form id="login-form" class="stack-form">
-        <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
-        <label>Senha<input type="password" name="password" required minlength="6" autocomplete="current-password"></label>
+        <label>PIN administrativo<input type="password" name="pin" required minlength="4" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" autocomplete="current-password" placeholder="••••"></label>
         <button class="button primary full" type="submit">Entrar</button>
       </form>
-      <button class="text-button" id="show-signup" type="button">Primeiro acesso? Criar conta administrativa</button>
       <a class="back-link" href="../">Voltar à loja</a>
-    </section>
-  </main>
-
-  <main class="login-page hidden" id="signup-view">
-    <section class="login-card">
-      <img src="../assets/logo-raytech.png" alt="Logo RayTech">
-      <p class="section-label">PRIMEIRO ACESSO</p>
-      <h1>Criar acesso</h1>
-      <p class="muted">Use o e-mail autorizado para criar sua senha. Se a confirmação estiver ativa, verifique sua caixa de entrada.</p>
-      <form id="signup-form" class="stack-form">
-        <label>E-mail<input type="email" name="email" required autocomplete="email"></label>
-        <label>Senha<input type="password" name="password" required minlength="8" autocomplete="new-password"></label>
-        <label>Confirmar senha<input type="password" name="confirmation" required minlength="8" autocomplete="new-password"></label>
-        <button class="button primary full" type="submit">Criar conta</button>
-      </form>
-      <button class="text-button" id="show-login" type="button">Já tenho uma conta</button>
     </section>
   </main>
 
   <main class="admin-shell hidden" id="admin-view">
     <header class="admin-header">
       <div class="container header-inner">
-        <div class="brand"><img src="../assets/logo-raytech.png" alt="Logo RayTech"><div><span>RayTech Admin</span><small id="admin-email"></small></div></div>
+        <div class="brand"><img src="../assets/logo-raytech.png" alt="Logo RayTech"><div><span>RayTech Admin</span><small>Acesso protegido por PIN</small></div></div>
         <div class="admin-header-actions"><a class="button secondary compact" href="../" target="_blank">Ver loja</a><button class="button secondary compact" id="logout-button" type="button">Sair</button></div>
       </div>
     </header>
