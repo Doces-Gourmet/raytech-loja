@@ -1,72 +1,42 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#050505">
-  <meta name="robots" content="noindex,nofollow">
-  <title>RayTech Admin</title>
-  <link rel="icon" href="../assets/logo-raytech.png">
-  <link rel="stylesheet" href="../assets/styles.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#050505">
+  <title>ADM | RayTech</title><link rel="stylesheet" href="../assets/styles.css">
 </head>
 <body class="admin-body">
-  <main class="login-page" id="login-view">
-    <section class="login-card">
-      <img src="../assets/logo-raytech.png" alt="Logo RayTech">
-      <p class="section-label">ÁREA RESTRITA</p>
-      <h1>RayTech Admin</h1>
-      <p class="muted">Digite o PIN de 4 dígitos para administrar produtos, estoque e pedidos.</p>
-      <form id="login-form" class="stack-form">
-        <label>PIN administrativo<input type="password" name="pin" required minlength="4" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" autocomplete="current-password" placeholder="••••"></label>
-        <button class="button primary full" type="submit">Entrar</button>
-      </form>
-      <a class="back-link" href="../">Voltar à loja</a>
+  <header class="site-header"><a class="brand" href="../"><span class="rt-mark">RT</span><span>RayTech</span></a><span class="admin-badge">Painel ADM</span><button id="logoutButton" class="button ghost small hidden" type="button">Sair</button></header>
+  <main class="admin-main">
+    <section class="login-card" id="loginPanel">
+      <span class="rt-mark large">RT</span><span class="eyebrow">Acesso restrito</span><h1>Digite sua senha</h1><p>Use a senha numérica de 4 dígitos do administrador.</p>
+      <form id="loginForm"><label>Senha<input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="current-password" required placeholder="••••"></label><p id="loginMessage" class="form-message"></p><button class="button primary full" type="submit">Entrar</button></form>
+    </section>
+
+    <section id="adminPanel" class="admin-panel hidden">
+      <div class="admin-title"><div><span class="eyebrow">Gerenciamento</span><h1>Produtos</h1><p>Cadastre preços, estoque e fotos dos seus iPhones.</p></div><button id="newProduct" class="button primary" type="button">+ Novo produto</button></div>
+      <div class="stats"><article><span>Produtos</span><strong id="statProducts">0</strong></article><article><span>Em estoque</span><strong id="statStock">0</strong></article><article><span>Investimento</span><strong id="statCost">R$ 0,00</strong></article></div>
+      <div class="admin-grid">
+        <section class="product-form-card">
+          <div class="card-title"><h2 id="formTitle">Novo produto</h2><button id="cancelEdit" class="text-button hidden" type="button">Cancelar edição</button></div>
+          <form id="productForm">
+            <input id="productId" type="hidden"><input id="existingImagePath" type="hidden">
+            <div class="form-grid">
+              <label class="span-2">Nome do iPhone<input id="name" required maxlength="120" placeholder="iPhone 15 Pro 256 GB"></label>
+              <label>Condição<select id="category" required><option value="Novo">Novo</option><option value="Seminovo">Seminovo</option></select></label>
+              <label>Estoque<input id="stock" type="number" min="0" step="1" value="1" required></label>
+              <label>Preço de venda<input id="price" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="4999,00"></label>
+              <label>Preço anterior<input id="comparePrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="5299,00"></label>
+              <label class="span-2 cost-field">Preço de custo<input id="costPrice" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="3900,00"><small>Visível somente no ADM.</small></label>
+              <label class="span-2">Descrição<textarea id="description" rows="3" maxlength="800" placeholder="Cor, armazenamento, bateria, garantia..."></textarea></label>
+              <label class="span-2 image-upload">Imagem do produto<input id="image" type="file" accept="image/jpeg,image/png,image/webp,image/avif"><small>JPG, PNG, WEBP ou AVIF — até 8 MB.</small></label>
+              <label class="check"><input id="active" type="checkbox" checked> Produto ativo</label><label class="check"><input id="featured" type="checkbox"> Destaque</label>
+            </div>
+            <p id="productMessage" class="form-message"></p><button class="button primary full" type="submit">Salvar produto</button>
+          </form>
+        </section>
+        <section class="product-list-card"><div class="card-title"><h2>Catálogo cadastrado</h2><button id="refreshProducts" class="text-button" type="button">Atualizar</button></div><div id="adminProducts" class="admin-products"></div></section>
+      </div>
     </section>
   </main>
-
-  <main class="admin-shell hidden" id="admin-view">
-    <header class="admin-header">
-      <div class="container header-inner">
-        <div class="brand"><img src="../assets/logo-raytech.png" alt="Logo RayTech"><div><span>RayTech Admin</span><small>Acesso protegido por PIN</small></div></div>
-        <div class="admin-header-actions"><a class="button secondary compact" href="../" target="_blank">Ver loja</a><button class="button secondary compact" id="logout-button" type="button">Sair</button></div>
-      </div>
-    </header>
-
-    <div class="container admin-layout">
-      <aside class="admin-form-card">
-        <div class="panel-title"><span>＋</span><div><h1 id="product-form-title">Cadastrar produto</h1><p>Adicione as informações da vitrine.</p></div></div>
-        <form id="product-form" class="stack-form">
-          <input type="hidden" name="id">
-          <input type="hidden" name="currentImagePath">
-          <label>Nome<input name="name" required minlength="2" maxlength="120"></label>
-          <label>Condição<select name="category" required><option value="Novo">iPhone novo</option><option value="Seminovo">iPhone seminovo</option></select></label>
-          <div class="field-grid"><label>Preço<input name="price" required inputmode="decimal" placeholder="4.999,90"></label><label>Preço anterior<input name="compareAtPrice" inputmode="decimal" placeholder="5.299,90"></label></div>
-          <label>Estoque<input name="stock" required type="number" min="0" value="1"></label>
-          <label>Descrição<textarea name="description" rows="4" maxlength="1200" placeholder="Cor, capacidade, saúde da bateria e garantia"></textarea></label>
-          <label>Imagem do produto<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/avif"></label>
-          <div class="checkboxes"><label><input type="checkbox" name="active" checked> Disponível na loja</label><label><input type="checkbox" name="featured"> Produto em destaque</label></div>
-          <button class="button primary full" id="save-product" type="submit">Salvar produto</button>
-          <button class="button secondary full hidden" id="cancel-edit" type="button">Cancelar edição</button>
-        </form>
-      </aside>
-
-      <div class="admin-content">
-        <section class="stats-grid"><article><span>Produtos</span><strong id="stat-products">0</strong></article><article><span>Em estoque</span><strong id="stat-stock">0</strong></article><article><span>Pedidos</span><strong id="stat-orders">0</strong></article></section>
-        <section class="admin-panel">
-          <div class="panel-heading"><div><h2>Produtos</h2><p>Cadastros da vitrine RayTech</p></div><button class="button secondary compact" id="refresh-products" type="button">Atualizar</button></div>
-          <div class="table-wrap"><table><thead><tr><th>Produto</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead><tbody id="products-table"></tbody></table></div>
-          <div class="empty-state small hidden" id="empty-admin-products"><p>Nenhum produto cadastrado.</p></div>
-        </section>
-        <section class="admin-panel">
-          <div class="panel-heading"><div><h2>Pedidos recentes</h2><p>Pedidos registrados pela loja</p></div><button class="button secondary compact" id="refresh-orders" type="button">Atualizar</button></div>
-          <div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Status</th></tr></thead><tbody id="orders-table"></tbody></table></div>
-          <div class="empty-state small hidden" id="empty-orders"><p>Nenhum pedido recebido.</p></div>
-        </section>
-      </div>
-    </div>
-  </main>
-
-  <div class="toast hidden" id="toast" role="status"></div>
-  <script type="module" src="../assets/admin.js"></script>
-</body>
-</html>
+  <script src="../config.js"></script><script type="module" src="../assets/admin.js"></script>
+</body></html>
