@@ -1,98 +1,24 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, PRODUCT_BUCKET, FALLBACK_WHATSAPP } from "../config.js";
+const cfg=window.RAYTECH_CONFIG;
+const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
+const money=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(v)||0);
+const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+let products=[],filter='Todos',cart=JSON.parse(localStorage.getItem('raytech-cart')||'[]'),settings={};
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-const state = { products: [], cart: loadCart(), query: "", category: "Todos", whatsapp: FALLBACK_WHATSAPP };
-const el = (id) => document.getElementById(id);
+function api(path,options={}){return fetch(`${cfg.supabaseUrl}/rest/v1/${path}`,{...options,headers:{apikey:cfg.supabaseKey,'Content-Type':'application/json',...(options.headers||{})}}).then(async r=>{const body=await r.json().catch(()=>null);if(!r.ok)throw new Error(body?.message||'Não foi possível acessar a loja.');return body})}
+function imageUrl(path){if(!path)return '';if(/^https?:/.test(path))return path;return `${cfg.supabaseUrl}/storage/v1/object/public/product-images/${encodeURI(path)}`}
+function saveCart(){localStorage.setItem('raytech-cart',JSON.stringify(cart));renderCart()}
+function cartQty(){return cart.reduce((n,i)=>n+i.qty,0)}
+function currentItems(){return cart.map(i=>{const p=products.find(p=>p.id===i.id);return p?{...p,qty:Math.min(i.qty,p.stock)}:null}).filter(Boolean)}
 
-function loadCart() {
-  try { return JSON.parse(localStorage.getItem("raytech-cart") || "[]"); } catch { return []; }
-}
-function saveCart() { localStorage.setItem("raytech-cart", JSON.stringify(state.cart)); renderCart(); }
-function safe(value = "") { return String(value).replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char])); }
-function imageUrl(path) { return path ? supabase.storage.from(PRODUCT_BUCKET).getPublicUrl(path).data.publicUrl : ""; }
-function toast(message, error = false) { const node = el("toast"); node.textContent = message; node.classList.toggle("error", error); node.classList.remove("hidden"); clearTimeout(toast.timer); toast.timer = setTimeout(() => node.classList.add("hidden"), 3200); }
+function renderProducts(){const q=$('#searchInput').value.trim().toLowerCase();const list=products.filter(p=>(filter==='Todos'||p.category===filter)&&(`${p.name} ${p.description||''}`).toLowerCase().includes(q));$('#productSummary').textContent=`${list.length} aparelho${list.length===1?'':'s'} disponível${list.length===1?'':'is'}`;$('#emptyState').classList.toggle('hidden',!!list.length);$('#productGrid').innerHTML=list.map(p=>`<article class="product-card"><div class="product-image">${p.image_path?`<img src="${esc(imageUrl(p.image_path))}" alt="${esc(p.name)}" loading="lazy">`:`<span class="image-placeholder">RT</span>`}</div><div class="product-info"><div class="product-top"><span class="tag">${esc(p.category)}</span><span class="stock">${p.stock>0?`${p.stock} disponível${p.stock>1?'is':''}`:'Esgotado'}</span></div><h3>${esc(p.name)}</h3><p>${esc(p.description||'iPhone selecionado pela RayTech.')}</p><div class="price-row"><strong>${money(p.price)}</strong>${p.compare_at_price>p.price?`<del>${money(p.compare_at_price)}</del>`:''}</div><button class="button primary full add-cart" data-id="${p.id}" ${p.stock<1?'disabled':''}>${p.stock<1?'Esgotado':'Adicionar ao carrinho'}</button></div></article>`).join('');$$('.add-cart').forEach(b=>b.onclick=()=>addToCart(b.dataset.id))}
+function addToCart(id){const p=products.find(x=>x.id===id);if(!p||p.stock<1)return;const item=cart.find(x=>x.id===id);if(item)item.qty=Math.min(item.qty+1,p.stock);else cart.push({id,qty:1});saveCart();openCart()}
+function renderCart(){const items=currentItems();cart=items.map(i=>({id:i.id,qty:i.qty}));$('#cartCount').textContent=cartQty();$('#cartEmpty').classList.toggle('hidden',!!items.length);$('#cartItems').innerHTML=items.map(i=>`<div class="cart-row"><div><h3>${esc(i.name)}</h3><p>${money(i.price)} cada</p></div><strong>${money(i.price*i.qty)}</strong><div class="qty"><button data-id="${i.id}" data-delta="-1" aria-label="Diminuir">−</button><span>${i.qty}</span><button data-id="${i.id}" data-delta="1" aria-label="Aumentar">+</button></div></div>`).join('');$('#cartTotal').textContent=money(items.reduce((s,i)=>s+i.price*i.qty,0));$('#checkoutButton').disabled=!items.length;$$('.qty button').forEach(b=>b.onclick=()=>changeQty(b.dataset.id,Number(b.dataset.delta)))}
+function changeQty(id,d){const i=cart.find(x=>x.id===id),p=products.find(x=>x.id===id);if(!i||!p)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);else i.qty=Math.min(i.qty,p.stock);saveCart()}
+function openCart(){const d=$('#cartDrawer');d.classList.add('open');d.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}
+function closeCart(){const d=$('#cartDrawer');d.classList.remove('open');d.setAttribute('aria-hidden','true');document.body.style.overflow=''}
 
-async function loadStore() {
-  const [settingsResult, productsResult] = await Promise.all([
-    supabase.from("store_settings").select("whatsapp,instagram").eq("id", 1).maybeSingle(),
-    supabase.from("products").select("id,name,description,category,price,compare_at_price,stock,image_path,featured,created_at").eq("active", true).order("featured", { ascending: false }).order("created_at", { ascending: false })
-  ]);
-  el("loading-products").classList.add("hidden");
-  if (settingsResult.data?.whatsapp) state.whatsapp = settingsResult.data.whatsapp;
-  document.querySelectorAll("[data-whatsapp-link]").forEach((link) => link.href = `https://wa.me/${state.whatsapp}`);
-  if (productsResult.error) { toast("Não foi possível carregar o catálogo.", true); state.products = []; }
-  else state.products = productsResult.data || [];
-  state.cart = state.cart.filter((line) => state.products.some((product) => product.id === line.id));
-  renderFilters(); renderProducts(); saveCart();
-}
+async function load(){try{const [p,s]=await Promise.all([api('products?select=id,name,description,category,price,compare_at_price,stock,image_path,featured&active=eq.true&order=featured.desc,created_at.desc'),api('store_settings?select=*&limit=1').catch(()=>[])]);products=p;settings=s[0]||{};$('#instagramLink').href=settings.instagram_url||cfg.instagram;renderProducts();renderCart()}catch(e){$('#productSummary').textContent='Loja temporariamente indisponível';$('#productGrid').innerHTML=`<div class="empty"><b>Não foi possível carregar o catálogo.</b><span>${esc(e.message)}</span></div>`}}
 
-function renderFilters() {
-  const categories = ["Todos", ...new Set(state.products.map((product) => product.category))];
-  el("category-filters").innerHTML = categories.map((category) => `<button class="filter-button ${state.category === category ? "active" : ""}" data-category="${safe(category)}">${safe(category)}</button>`).join("");
-}
-function renderProducts() {
-  const query = state.query.toLocaleLowerCase("pt-BR");
-  const products = state.products.filter((product) => (state.category === "Todos" || product.category === state.category) && `${product.name} ${product.description}`.toLocaleLowerCase("pt-BR").includes(query));
-  el("empty-products").classList.toggle("hidden", products.length > 0);
-  el("product-grid").innerHTML = products.map((product) => {
-    const image = imageUrl(product.image_path);
-    return `<article class="product-card"><div class="product-image">${image ? `<img src="${safe(image)}" alt="${safe(product.name)}" loading="lazy">` : `<span class="placeholder-phone"><svg><use href="#icon-phone"></use></svg></span>`}${product.featured ? '<span class="badge">DESTAQUE</span>' : ""}</div><div class="product-content"><p class="product-category">${safe(product.category)}</p><h3>${safe(product.name)}</h3><p class="product-description">${safe(product.description)}</p><div class="product-buy"><div>${product.compare_at_price ? `<span class="old-price">${money.format(product.compare_at_price)}</span>` : ""}<strong class="price">${money.format(product.price)}</strong><span class="stock">${product.stock > 0 ? `${product.stock} em estoque` : "Indisponível"}</span></div><button class="add-button" data-add="${product.id}" ${product.stock < 1 ? "disabled" : ""} aria-label="Adicionar ${safe(product.name)}">＋</button></div></div></article>`;
-  }).join("");
-}
-
-function addToCart(id) {
-  const product = state.products.find((item) => item.id === id);
-  if (!product || product.stock < 1) return;
-  const line = state.cart.find((item) => item.id === id);
-  if (line) line.quantity = Math.min(line.quantity + 1, product.stock); else state.cart.push({ id, quantity: 1 });
-  saveCart(); toast(`${product.name} foi adicionado ao carrinho.`);
-}
-function setQuantity(id, quantity) {
-  const product = state.products.find((item) => item.id === id);
-  if (!product) return;
-  if (quantity <= 0) state.cart = state.cart.filter((item) => item.id !== id); else state.cart.find((item) => item.id === id).quantity = Math.min(quantity, product.stock);
-  saveCart();
-}
-function cartDetails() { return state.cart.map((line) => ({ ...line, product: state.products.find((product) => product.id === line.id) })).filter((line) => line.product); }
-function cartTotal() { return cartDetails().reduce((sum, line) => sum + Number(line.product.price) * line.quantity, 0); }
-function renderCart() {
-  const lines = cartDetails();
-  const units = lines.reduce((sum, line) => sum + line.quantity, 0);
-  el("cart-count").textContent = units;
-  el("cart-count").classList.toggle("hidden", units === 0);
-  el("checkout-button").disabled = units === 0;
-  el("cart-total").textContent = money.format(cartTotal());
-  el("checkout-total").textContent = money.format(cartTotal());
-  el("cart-items").innerHTML = lines.length ? lines.map(({ product, quantity }) => { const image = imageUrl(product.image_path); return `<article class="cart-line">${image ? `<img src="${safe(image)}" alt="">` : `<span class="cart-line-placeholder"><svg><use href="#icon-phone"></use></svg></span>`}<div><h3>${safe(product.name)}</h3><p>${money.format(product.price)}</p><div class="quantity"><button data-qty="${product.id}" data-value="${quantity - 1}" aria-label="Diminuir">−</button><span>${quantity}</span><button data-qty="${product.id}" data-value="${quantity + 1}" aria-label="Aumentar">＋</button></div></div><button class="remove-line" data-remove="${product.id}" aria-label="Remover">×</button></article>`; }).join("") : '<div class="cart-empty"><div><svg width="36" height="36"><use href="#icon-cart"></use></svg><p>Seu carrinho está vazio.</p></div></div>';
-}
-function toggleCart(open) { el("cart-drawer").classList.toggle("open", open); el("drawer-backdrop").classList.toggle("hidden", !open); el("cart-drawer").setAttribute("aria-hidden", String(!open)); document.body.style.overflow = open ? "hidden" : ""; }
-
-async function submitOrder(event) {
-  event.preventDefault();
-  const button = el("submit-order"); button.disabled = true; button.textContent = "Registrando...";
-  const form = new FormData(event.currentTarget);
-  const { data, error } = await supabase.rpc("place_order", { p_customer_name: form.get("name"), p_customer_phone: form.get("phone"), p_notes: form.get("notes"), p_items: state.cart.map((line) => ({ productId: line.id, quantity: line.quantity })) });
-  button.disabled = false; button.textContent = "Enviar pedido pelo WhatsApp";
-  if (error) { toast(error.message || "Não foi possível registrar o pedido.", true); return; }
-  const lines = data.items.map((item) => `• ${item.quantity}x ${item.name} — ${money.format(item.lineTotal)}`);
-  const message = [`Olá, RayTech! Quero finalizar o pedido *${data.code}*.`, "", ...lines, "", `*Total: ${money.format(data.total)}*`, `Cliente: ${form.get("name")}`, `Contato: ${form.get("phone")}`, form.get("notes") ? `Observação: ${form.get("notes")}` : ""].filter(Boolean).join("\n");
-  state.cart = []; saveCart(); event.currentTarget.reset(); el("checkout-dialog").close(); toggleCart(false);
-  window.location.href = `https://wa.me/${state.whatsapp}?text=${encodeURIComponent(message)}`;
-}
-
-document.addEventListener("click", (event) => {
-  const add = event.target.closest("[data-add]"); if (add) addToCart(add.dataset.add);
-  const category = event.target.closest("[data-category]"); if (category) { state.category = category.dataset.category; renderFilters(); renderProducts(); }
-  const qty = event.target.closest("[data-qty]"); if (qty) setQuantity(qty.dataset.qty, Number(qty.dataset.value));
-  const remove = event.target.closest("[data-remove]"); if (remove) setQuantity(remove.dataset.remove, 0);
-});
-for (const id of ["desktop-search", "mobile-search"]) el(id).addEventListener("input", (event) => { state.query = event.target.value; document.querySelectorAll("#desktop-search,#mobile-search").forEach((input) => { if (input !== event.target) input.value = state.query; }); renderProducts(); });
-el("cart-button").addEventListener("click", () => toggleCart(true));
-el("close-cart").addEventListener("click", () => toggleCart(false));
-el("drawer-backdrop").addEventListener("click", () => toggleCart(false));
-el("checkout-button").addEventListener("click", () => el("checkout-dialog").showModal());
-el("close-checkout").addEventListener("click", () => el("checkout-dialog").close());
-el("checkout-form").addEventListener("submit", submitOrder);
-renderCart(); loadStore();
+$('#searchInput').addEventListener('input',renderProducts);$$('.filter').forEach(b=>b.onclick=()=>{$$('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;renderProducts()});$('#openCart').onclick=openCart;$$('[data-close-cart]').forEach(x=>x.onclick=closeCart);$('#checkoutButton').onclick=()=>{closeCart();$('#checkoutDialog').showModal()};$('#closeCheckout').onclick=()=>$('#checkoutDialog').close();
+$('#checkoutForm').onsubmit=async e=>{e.preventDefault();const btn=e.submitter,msg=$('#checkoutMessage'),items=currentItems();if(!items.length)return;btn.disabled=true;btn.textContent='Enviando...';msg.textContent='';const fd=new FormData(e.currentTarget);try{const payload={p_customer_name:fd.get('customer_name'),p_customer_phone:fd.get('customer_phone'),p_notes:fd.get('notes')||null,p_items:items.map(i=>({product_id:i.id,quantity:i.qty}))};const order=await api('rpc/place_order',{method:'POST',body:JSON.stringify(payload)});cart=[];saveCart();e.currentTarget.reset();$('#checkoutDialog').close();const number=String(settings.whatsapp_number||cfg.whatsapp||'').replace(/\D/g,'');const orderId=typeof order==='string'?order:(order?.id||'');const summary=items.map(i=>`${i.qty}x ${i.name}`).join(', ');const text=`Olá, RayTech! Fiz o pedido ${orderId?`#${orderId} `:''}pelo site: ${summary}. Total: ${money(items.reduce((s,i)=>s+i.price*i.qty,0))}.`;if(number)window.open(`https://wa.me/${number}?text=${encodeURIComponent(text)}`,'_blank');else alert('Pedido recebido com sucesso! A RayTech entrará em contato.')}catch(err){msg.textContent=err.message||'Não foi possível enviar o pedido.'}finally{btn.disabled=false;btn.textContent='Enviar pedido'}};
+load();
