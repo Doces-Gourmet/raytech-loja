@@ -2,18 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#050505">
-  <title>ADM | RayTech</title><link rel="icon" href="../assets/logo-raytech.svg?v=20261015-3" type="image/svg+xml"><link rel="stylesheet" href="../assets/styles.css?v=20261015-3">
+  <title>ADM | RayTech</title><link rel="icon" href="../assets/logo-raytech.svg?v=20261015-4" type="image/svg+xml"><link rel="stylesheet" href="../assets/styles.css?v=20261015-4"><link rel="stylesheet" href="../assets/premium.css?v=20261015-2">
 </head>
 <body class="admin-body">
-  <header class="site-header"><a class="brand" href="../"><img class="rt-logo" src="../assets/logo-raytech.svg?v=20261015-3" alt="Logo RayTech"><span>RayTech</span></a><span class="admin-badge">Painel ADM</span><button id="logoutButton" class="button ghost small hidden" type="button">Sair</button></header>
+  <header class="site-header"><a class="brand" href="../"><img class="rt-logo" src="../assets/logo-raytech.svg?v=20261015-4" alt="Logo RayTech"><span>RayTech</span></a><span class="admin-badge">Painel ADM</span><button id="logoutButton" class="button ghost small hidden" type="button">Sair</button></header>
   <main class="admin-main">
     <section class="login-card" id="loginPanel">
-      <img class="rt-logo large" src="../assets/logo-raytech.svg?v=20261015-3" alt="Logo RayTech"><span class="eyebrow">Acesso restrito</span><h1>Digite sua senha</h1><p>Use a senha numérica de 4 dígitos do administrador.</p>
+      <img class="rt-logo large" src="../assets/logo-raytech.svg?v=20261015-4" alt="Logo RayTech"><span class="eyebrow">Acesso restrito</span><h1>Digite sua senha</h1><p>Use a senha numérica de 4 dígitos do administrador.</p>
       <form id="loginForm"><label>Senha<input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="current-password" required placeholder="••••"></label><p id="loginMessage" class="form-message"></p><button class="button primary full" type="submit">Entrar</button></form>
     </section>
 
     <section id="adminPanel" class="admin-panel hidden">
-      <div class="admin-title"><div><span class="eyebrow">Gerenciamento</span><h1>Produtos</h1><p>Cadastre preços, estoque e fotos dos seus iPhones.</p></div><button id="newProduct" class="button primary" type="button">+ Novo produto</button></div>
+      <div class="admin-title"><div><span class="eyebrow">Gerenciamento</span><h1>Produtos</h1><p>Cadastre preço, estoque, fotos e detalhes de cada aparelho.</p></div><button id="newProduct" class="button primary" type="button">+ Novo produto</button></div>
       <div class="stats"><article><span>Produtos</span><strong id="statProducts">0</strong></article><article><span>Em estoque</span><strong id="statStock">0</strong></article><article><span>Investimento</span><strong id="statCost">R$ 0,00</strong></article></div>
       <div class="admin-grid">
         <section class="product-form-card">
@@ -21,13 +21,17 @@
           <form id="productForm">
             <input id="productId" type="hidden"><input id="existingImagePath" type="hidden">
             <div class="form-grid">
-              <label class="span-2">Nome do iPhone<input id="name" required maxlength="120" placeholder="iPhone 15 Pro 256 GB"></label>
+              <label class="span-2">Nome do aparelho<input id="name" required maxlength="120" placeholder="iPhone 15 Pro"></label>
               <label>Condição<select id="category" required><option value="Novo">Novo</option><option value="Seminovo">Seminovo</option></select></label>
               <label>Estoque<input id="stock" type="number" min="0" step="1" value="1" required></label>
+              <label>Armazenamento<input id="storage" maxlength="30" placeholder="128 GB"></label>
+              <label>Cor<input id="color" maxlength="60" placeholder="Titânio Natural"></label>
+              <label>Saúde da bateria<input id="battery" maxlength="30" placeholder="94%"></label>
+              <label>Garantia<input id="warranty" maxlength="60" placeholder="90 dias"></label>
               <label>Preço de venda<input id="price" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="4999,00"></label>
               <label>Preço anterior<input id="comparePrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="5299,00"></label>
               <label class="span-2 cost-field">Preço de custo<input id="costPrice" type="number" min="0" step="0.01" inputmode="decimal" required placeholder="3900,00"><small>Visível somente no ADM.</small></label>
-              <label class="span-2">Descrição<textarea id="description" rows="3" maxlength="800" placeholder="Cor, armazenamento, bateria, garantia..."></textarea></label>
+              <label class="span-2">Descrição<textarea id="description" rows="4" maxlength="700" placeholder="Estado do aparelho, acessórios, observações e outros detalhes..."></textarea></label>
               <label class="span-2 image-upload">Imagem do produto<input id="image" type="file" accept="image/jpeg,image/png,image/webp,image/avif"><small>JPG, PNG, WEBP ou AVIF — até 8 MB.</small></label>
               <label class="check"><input id="active" type="checkbox" checked> Produto ativo</label><label class="check"><input id="featured" type="checkbox"> Destaque</label>
             </div>
@@ -38,5 +42,5 @@
       </div>
     </section>
   </main>
-  <script src="../config.js?v=20261015-2"></script><script type="module" src="../assets/admin.js?v=20261015-2"></script>
+  <script src="../config.js?v=20261015-2"></script><script type="module" src="../assets/admin.js?v=20261015-3"></script>
 </body></html>
