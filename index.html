@@ -4,48 +4,112 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#050505">
-  <meta name="description" content="RayTech — iPhones novos e seminovos selecionados.">
-  <title>RayTech | iPhones</title>
-  <link rel="icon" href="./assets/logo-raytech.svg?v=20261015-3" type="image/svg+xml">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="stylesheet" href="./assets/styles.css?v=20261015-3">
+  <meta name="description" content="RayTech — catálogo digital de celulares novos e seminovos.">
+  <title>RayTech | Catálogo Digital</title>
+  <link rel="icon" href="./assets/logo-raytech.svg?v=20261015-4" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/styles.css?v=20261015-4">
 </head>
-<body>
-  <header class="site-header">
+<body class="premium-store">
+  <header class="site-header dark-header">
     <a class="brand" href="#inicio" aria-label="RayTech - início">
-      <img class="rt-logo" src="./assets/logo-raytech.svg?v=20261015-3" alt="Logo RayTech"><span>RayTech</span>
+      <img class="rt-logo" src="./assets/logo-raytech.svg?v=20261015-4" alt="Logo RayTech">
+      <span>RAYTECH</span>
     </a>
     <nav aria-label="Navegação principal">
-      <a href="#catalogo">iPhones</a><a href="#como-comprar">Como comprar</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#como-comprar">Como comprar</a>
       <a class="instagram-link" id="instagramLink" href="#" target="_blank" rel="noreferrer">Instagram</a>
     </nav>
-    <button class="cart-button" id="openCart" type="button" aria-label="Abrir carrinho">Carrinho <b id="cartCount">0</b></button>
+    <button class="cart-button" id="openCart" type="button" aria-label="Abrir carrinho">
+      Carrinho <b id="cartCount">0</b>
+    </button>
   </header>
 
   <main>
-    <section class="hero" id="inicio">
-      <div class="hero-copy">
-        <span class="eyebrow">Seu próximo iPhone está aqui</span>
-        <h1>Tecnologia que combina com você.</h1>
-        <p>iPhones novos e seminovos, com procedência, atendimento direto e compra simples.</p>
-        <div class="hero-actions"><a class="button primary" href="#catalogo">Ver aparelhos</a><a class="button ghost" href="#como-comprar">Saiba mais</a></div>
+    <section class="hero-premium" id="inicio">
+      <div class="hero-glow hero-glow-one"></div>
+      <div class="hero-glow hero-glow-two"></div>
+
+      <div class="hero-brandline">
+        <img src="./assets/logo-raytech.svg?v=20261015-4" alt="Logo RayTech" class="hero-logo">
+        <span>RAYTECH</span>
       </div>
-      <div class="phone-art" aria-label="Ilustração de iPhones">
-        <div class="phone phone-back"><span class="camera">● ●<br>●</span><span class="apple">●</span></div>
-        <div class="phone phone-front"><span class="island"></span><img class="screen-logo" src="./assets/logo-raytech.svg?v=20261015-3" alt=""></div>
+
+      <div class="hero-title-wrap">
+        <span class="hero-kicker">Seu próximo smartphone está aqui</span>
+        <h1>CATÁLOGO<br><span>DIGITAL</span></h1>
+        <p>CELULARES NOVOS E SEMINOVOS</p>
       </div>
+
+      <div class="hero-showcase">
+        <div class="floating-note note-confidence">
+          <span>Mais</span><strong>confiança</strong><i></i>
+        </div>
+        <div class="floating-note note-reviewed">
+          <span class="note-icon">✓</span><strong>Revisados</strong><i></i>
+        </div>
+        <div class="floating-note note-delivery">
+          <span class="note-icon">□</span><strong>Pronta entrega</strong><i></i>
+        </div>
+        <div class="floating-note note-payment">
+          <span class="note-icon">▭</span><strong>Parcelamento</strong><i></i>
+        </div>
+
+        <div class="device-stage">
+          <div class="device-shadow"></div>
+          <div class="device-frame">
+            <div class="device-island"></div>
+            <div class="device-screen">
+              <div class="mock-topbar">
+                <span>9:41</span>
+                <img src="./assets/logo-raytech.svg?v=20261015-4" alt="">
+                <span>⌕　🛒</span>
+              </div>
+              <div class="mock-hero">
+                <div>
+                  <small>RAYTECH</small>
+                  <h2>Smartphones para o seu próximo nível.</h2>
+                </div>
+                <div class="mock-cameras"><i></i><i></i><i></i></div>
+              </div>
+              <div class="mock-benefits">
+                <span>✓ Qualidade</span><span>✓ Compra segura</span><span>✓ Suporte</span>
+              </div>
+              <div class="mock-tabs"><b>Todos</b><span>iPhone</span><span>Novos</span><span>Seminovos</span></div>
+              <div class="mock-products">
+                <article><div class="mock-phone triple"></div><div><strong>iPhone 15 Pro</strong><small>Novo · 128 GB</small><b>R$ 6.999,00</b></div><button>＋</button></article>
+                <article><div class="mock-phone purple"></div><div><strong>iPhone 14</strong><small>Seminovo · Bateria 94%</small><b>R$ 3.499,00</b></div><button>＋</button></article>
+                <article><div class="mock-phone blue"></div><div><strong>iPhone 13</strong><small>Seminovo · Bateria 92%</small><b>R$ 2.899,00</b></div><button>＋</button></article>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a class="whatsapp-card" href="#catalogo" aria-label="Ver catálogo">
+          <span class="wa-icon">◉</span>
+          <span><small>Atendimento via</small><strong>WhatsApp</strong></span>
+          <b>›</b>
+        </a>
+      </div>
+
+      <a class="hero-cta" href="#catalogo">Ver aparelhos <span>↓</span></a>
     </section>
 
-    <section class="benefits" aria-label="Diferenciais">
-      <article><b>Procedência</b><span>Aparelhos selecionados</span></article>
-      <article><b>Compra fácil</b><span>Pedido rápido e direto</span></article>
-      <article><b>Atendimento</b><span>Fale com a RayTech</span></article>
+    <section class="trust-strip" id="diferenciais" aria-label="Diferenciais">
+      <article><span>01</span><div><b>Procedência</b><small>Aparelhos selecionados</small></div></article>
+      <article><span>02</span><div><b>Revisados</b><small>Seminovos conferidos</small></div></article>
+      <article><span>03</span><div><b>Compra fácil</b><small>Pedido direto e rápido</small></div></article>
+      <article><span>04</span><div><b>Atendimento</b><small>Fale com a RayTech</small></div></article>
     </section>
 
-    <section class="catalog-section" id="catalogo">
-      <div class="section-heading"><div><span class="eyebrow">Catálogo</span><h2>Escolha seu iPhone</h2></div><p id="productSummary">Carregando aparelhos...</p></div>
+    <section class="catalog-section premium-catalog" id="catalogo">
+      <div class="section-heading">
+        <div><span class="eyebrow">Catálogo RayTech</span><h2>Encontre seu próximo celular.</h2></div>
+        <p id="productSummary">Carregando aparelhos...</p>
+      </div>
       <div class="catalog-tools">
-        <label class="search"><span>Buscar</span><input id="searchInput" type="search" placeholder="Ex.: iPhone 15 Pro" autocomplete="off"></label>
+        <label class="search"><span>Buscar aparelho</span><input id="searchInput" type="search" placeholder="Ex.: iPhone 15 Pro" autocomplete="off"></label>
         <div class="filters" role="group" aria-label="Filtrar catálogo">
           <button class="filter active" data-filter="Todos" type="button">Todos</button>
           <button class="filter" data-filter="Novo" type="button">Novos</button>
@@ -56,9 +120,13 @@
       <div class="empty hidden" id="emptyState"><b>Nenhum aparelho encontrado.</b><span>Tente outra busca ou filtro.</span></div>
     </section>
 
-    <section class="how" id="como-comprar">
-      <div><span class="eyebrow">Simples e seguro</span><h2>Como comprar</h2></div>
-      <ol><li><b>1</b><span><strong>Escolha</strong> o aparelho desejado.</span></li><li><b>2</b><span><strong>Adicione</strong> ao carrinho.</span></li><li><b>3</b><span><strong>Envie</strong> o pedido e combine o pagamento.</span></li></ol>
+    <section class="how premium-how" id="como-comprar">
+      <div><span class="eyebrow">Simples e seguro</span><h2>Como comprar</h2><p>Escolha o aparelho, adicione ao carrinho e finalize o atendimento pelo WhatsApp.</p></div>
+      <ol>
+        <li><b>1</b><span><strong>Escolha</strong> o aparelho desejado.</span></li>
+        <li><b>2</b><span><strong>Adicione</strong> ao carrinho.</span></li>
+        <li><b>3</b><span><strong>Envie</strong> o pedido e combine pagamento e entrega.</span></li>
+      </ol>
     </section>
   </main>
 
@@ -83,7 +151,12 @@
     </form>
   </dialog>
 
-  <footer><a class="brand" href="#inicio"><img class="rt-logo" src="./assets/logo-raytech.svg?v=20261015-3" alt="Logo RayTech"><span>RayTech</span></a><p>iPhones novos e seminovos.</p><a href="./admin/" class="admin-entry">ADM</a></footer>
+  <footer class="premium-footer">
+    <a class="brand" href="#inicio"><img class="rt-logo" src="./assets/logo-raytech.svg?v=20261015-4" alt="Logo RayTech"><span>RAYTECH</span></a>
+    <p>Celulares novos e seminovos.</p>
+    <a href="./admin/" class="admin-entry">Área administrativa</a>
+  </footer>
+
   <script src="./config.js?v=20261015-2"></script>
   <script type="module" src="./assets/store.js?v=20261015-2"></script>
 </body>
